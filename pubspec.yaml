@@ -1,0 +1,21 @@
+name: taskforge_cli
+description: >
+  A professional-grade CLI task manager built in pure Dart, demonstrating
+  clean architecture, SOLID design, and idiomatic Dart 3 features.
+version: 1.0.0
+publish_to: 'none'
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+
+dev_dependencies:
+  test: ^1.25.0
+  lints: ^4.0.0
+
+# `dart run taskforge_cli <command>` uses this as the default script
+# entry point (bin/taskforge_cli.dart), e.g.:
+#   dart run taskforge_cli add --title "Write README" --priority high
+executables:
+  taskforge_cli: taskforge_cli
