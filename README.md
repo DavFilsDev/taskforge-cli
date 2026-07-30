@@ -198,3 +198,12 @@ what CI enforces.
   Dart 1/2 idioms.
 - A test suite that actually exercises real filesystem behavior for
   the persistence layer, not just in-memory happy paths.
+
+## Author
+
+Developed and maintained by **Fanampinirina Miharisoa David Fisl RATIANDRAIBE**.
+
+Feel free to reach out or contribute through:
+
+- GitHub: [F Miharisoa David Fils RATIANDRAIBE](https://github.com/DavFilsDev)
+- LinkedIn: [Fanampinirina Miharisoa David Fils RATIANDRAIBE](https://www.linkedin.com/in/fanampinirina-miharisoa-david-fils-ratiandraibe-722376330/)
