@@ -11,7 +11,7 @@ final class UrgentTask extends Task {
     super.id,
     super.isDone,
   }) {
-    if (deadline.isBefore(DateTime(1971))) {
+    if (deadline!.isBefore(DateTime(1971))) {
       throw const TaskValidationException(
         'UrgentTask requires a valid, meaningful deadline.',
       );
