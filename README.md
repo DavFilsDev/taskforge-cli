@@ -142,6 +142,35 @@ stricter analyzer settings (`strict-casts`, `strict-inference`,
 see the note at the top of this README about why they haven't been
 run already.
 
+
+## Continuous integration
+
+`.github/workflows/dart.yml` runs on every push and pull request to
+`main`: `dart pub get`, `dart format --set-exit-if-changed`,
+`dart analyze --fatal-infos`, then `dart test`. A PR that fails
+formatting, has any analyzer issue (including infos), or breaks a
+test cannot merge — the same three commands you'd run locally are
+what CI enforces.
+
+## Troubleshooting
+
+- **`dart: command not found`** — the Dart SDK isn't on your `PATH`.
+  See the Setup section, or run `which dart` to confirm where it's
+  installed.
+- **Tasks seem to "disappear" between runs** — `tasks.json` is written
+  relative to your *current working directory*, not the project root.
+  Run `pwd` before `dart run bin/taskforge_cli.dart ...` to confirm
+  where you are; the file will show up there, not necessarily where
+  you expect.
+- **A test fails only when run alongside others, not alone** — check
+  whether it depends on `ServiceLocator`'s singleton state. Tests that
+  touch `ServiceLocator` must call `ServiceLocator.reset()` in `setUp`
+  (see `test/app_test.dart`) so each test starts from a clean
+  dependency graph pointed at its own temp directory.
+- **`dart analyze` flags something this README doesn't mention** — run
+  it locally before pushing; CI (see above) will block the merge
+  either way.
+
 ## Design decisions and trade-offs
 
 - **No argument-parsing package.** A hand-rolled `CliInputValidator`
