@@ -5,18 +5,12 @@ import 'task.dart';
 
 final class UrgentTask extends Task {
   UrgentTask({
-    required String title,
-    required Priority priority,
-    required DateTime deadline,
-    String? id,
-    bool isDone = false,
-  }) : super(
-          title: title,
-          priority: priority,
-          deadline: deadline,
-          id: id,
-          isDone: isDone,
-        ) {
+    required super.title,
+    required super.priority,
+    required DateTime super.deadline,
+    super.id,
+    super.isDone,
+  }) {
     if (deadline.isBefore(DateTime(1971))) {
       throw const TaskValidationException(
         'UrgentTask requires a valid, meaningful deadline.',
