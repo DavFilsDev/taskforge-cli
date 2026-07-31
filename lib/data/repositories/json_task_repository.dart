@@ -8,15 +8,23 @@ final class JsonTaskRepository implements TaskRepository {
 
   final JsonFileDataSource _dataSource;
 
-  @override
-  Future<List<Task>> getAll() async {
+  List<Task>? _cache;
+
+  Future<List<Task>> _loadTasks() async {
+    final cached = _cache;
+    if (cached != null) return cached;
     final records = await _dataSource.readAll();
-    return records.map(TaskModel.fromJson).toList();
+    final tasks = records.map(TaskModel.fromJson).toList();
+    _cache = tasks;
+    return tasks;
   }
 
   @override
+  Future<List<Task>> getAll() async => List.unmodifiable(await _loadTasks());
+
+  @override
   Future<Task?> getById(String id) async {
-    final tasks = await getAll();
+    final tasks = await _loadTasks();
     for (final task in tasks) {
       if (task.id == id) return task;
     }
@@ -26,7 +34,7 @@ final class JsonTaskRepository implements TaskRepository {
   @override
   Future<Task?> findByTitle(String title) async {
     final normalized = title.trim().toLowerCase();
-    final tasks = await getAll();
+    final tasks = await _loadTasks();
     for (final task in tasks) {
       if (task.title.trim().toLowerCase() == normalized) return task;
     }
@@ -35,14 +43,14 @@ final class JsonTaskRepository implements TaskRepository {
 
   @override
   Future<void> add(Task item) async {
-    final tasks = await getAll();
+    final tasks = await _loadTasks();
     tasks.add(item);
     await _persist(tasks);
   }
 
   @override
   Future<void> update(Task item) async {
-    final tasks = await getAll();
+    final tasks = await _loadTasks();
     final index = tasks.indexWhere((t) => t.id == item.id);
     if (index == -1) {
       tasks.add(item);
@@ -54,12 +62,13 @@ final class JsonTaskRepository implements TaskRepository {
 
   @override
   Future<void> deleteById(String id) async {
-    final tasks = await getAll();
+    final tasks = await _loadTasks();
     tasks.removeWhere((t) => t.id == id);
     await _persist(tasks);
   }
 
-  Future<void> _persist(List<Task> tasks) {
-    return _dataSource.writeAll(tasks.map(TaskModel.toJson).toList());
+  Future<void> _persist(List<Task> tasks) async {
+    _cache = tasks;
+    await _dataSource.writeAll(tasks.map(TaskModel.toJson).toList());
   }
 }
