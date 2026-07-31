@@ -4,20 +4,21 @@ import 'core/utils/constants.dart';
 import 'presentation/commands/command.dart';
 import 'presentation/validators/cli_input_validator.dart';
 
-Future<int> run(List<String> arguments) async {
-  final locator = ServiceLocator();
+Future<int> run(List<String> arguments, {ServiceLocator? locator}) async {
+  final resolvedLocator = locator ?? ServiceLocator();
 
   if (arguments.isEmpty ||
       arguments.first == '--help' ||
       arguments.first == '-h') {
-    return _findHelp(locator.commands).execute(CliInputValidator(const []));
+    return _findHelp(resolvedLocator.commands)
+        .execute(CliInputValidator(const []));
   }
 
   final commandName = arguments.first;
   final rest = arguments.skip(1).toList();
 
   Command? command;
-  for (final candidate in locator.commands) {
+  for (final candidate in resolvedLocator.commands) {
     if (candidate.name == commandName) {
       command = candidate;
       break;
@@ -31,25 +32,22 @@ Future<int> run(List<String> arguments) async {
 
   try {
     return await command.execute(CliInputValidator(rest));
-  } on TaskValidationException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitUsageError;
-  } on InvalidArgumentException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitUsageError;
-  } on TaskNotFoundException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitDataError;
-  } on DuplicateTaskException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitDataError;
-  } on MalformedDataException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitDataError;
-  } on FileException catch (e) {
-    print('Error: ${e.message}');
-    return AppConstants.exitIoError;
+  } on AppException catch (e) {
+    return _handle(e);
   }
+}
+
+int _handle(AppException exception) {
+  final exitCode = switch (exception) {
+    TaskValidationException() => AppConstants.exitUsageError,
+    InvalidArgumentException() => AppConstants.exitUsageError,
+    TaskNotFoundException() => AppConstants.exitDataError,
+    DuplicateTaskException() => AppConstants.exitDataError,
+    MalformedDataException() => AppConstants.exitDataError,
+    FileException() => AppConstants.exitIoError,
+  };
+  print('Error: ${exception.message}');
+  return exitCode;
 }
 
 Command _findHelp(List<Command> commands) =>
