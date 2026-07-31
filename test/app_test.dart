@@ -35,15 +35,18 @@ void main() {
       expect(code, AppConstants.exitUsageError);
     });
 
-    test('should return exitUsageError when a required flag is missing', () async {
+    test('should return exitUsageError when a required flag is missing',
+        () async {
       final locator = ServiceLocator(storagePath: '${tempDir.path}/tasks.json');
 
-      final code = await app.run(['add', '--priority', 'high'], locator: locator);
+      final code =
+          await app.run(['add', '--priority', 'high'], locator: locator);
 
       expect(code, AppConstants.exitUsageError);
     });
 
-    test('should return exitDataError when completing an unknown task id', () async {
+    test('should return exitDataError when completing an unknown task id',
+        () async {
       final locator = ServiceLocator(storagePath: '${tempDir.path}/tasks.json');
 
       final code = await app.run(['done', '--id', 'missing'], locator: locator);
