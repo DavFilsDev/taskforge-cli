@@ -22,14 +22,22 @@ void main() {
       }
     });
 
-    test('should return an empty list when the file does not exist yet', () async {
+    test('should return an empty list when the file does not exist yet',
+        () async {
       final result = await dataSource.readAll();
       expect(result, isEmpty);
     });
 
     test('should round-trip records written then read back', () async {
       final records = [
-        {'id': '1', 'title': 'A', 'priority': 'low', 'deadline': null, 'isDone': false, 'type': 'standard'},
+        {
+          'id': '1',
+          'title': 'A',
+          'priority': 'low',
+          'deadline': null,
+          'isDone': false,
+          'type': 'standard'
+        },
       ];
 
       await dataSource.writeAll(records);
@@ -39,16 +47,22 @@ void main() {
       expect(result.first['title'], 'A');
     });
 
-    test('should throw MalformedDataException when the file contains invalid JSON', () async {
+    test(
+        'should throw MalformedDataException when the file contains invalid JSON',
+        () async {
       await File(filePath).writeAsString('{invalid json}');
 
-      expect(() => dataSource.readAll(), throwsA(isA<MalformedDataException>()));
+      expect(
+          () => dataSource.readAll(), throwsA(isA<MalformedDataException>()));
     });
 
-    test('should throw MalformedDataException when the JSON root is not an array', () async {
+    test(
+        'should throw MalformedDataException when the JSON root is not an array',
+        () async {
       await File(filePath).writeAsString('{"not": "a list"}');
 
-      expect(() => dataSource.readAll(), throwsA(isA<MalformedDataException>()));
+      expect(
+          () => dataSource.readAll(), throwsA(isA<MalformedDataException>()));
     });
 
     test('should treat an empty file as an empty task list', () async {
@@ -57,7 +71,8 @@ void main() {
       expect(result, isEmpty);
     });
 
-    test('should create parent directories on write if they do not exist', () async {
+    test('should create parent directories on write if they do not exist',
+        () async {
       final nestedPath = '${tempDir.path}/nested/dir/tasks.json';
       final nestedSource = JsonFileDataSource(nestedPath);
 

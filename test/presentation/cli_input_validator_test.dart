@@ -5,19 +5,23 @@ import 'package:taskforge_cli/presentation/validators/cli_input_validator.dart';
 void main() {
   group('CliInputValidator', () {
     test('should extract a flag with its value', () {
-      final input = CliInputValidator(['--title', 'Buy milk', '--priority', 'high']);
+      final input =
+          CliInputValidator(['--title', 'Buy milk', '--priority', 'high']);
 
       expect(input.require('title'), 'Buy milk');
       expect(input.require('priority'), 'high');
     });
 
-    test('should throw InvalidArgumentException for a missing required flag', () {
+    test('should throw InvalidArgumentException for a missing required flag',
+        () {
       final input = CliInputValidator(['--priority', 'high']);
 
-      expect(() => input.require('title'), throwsA(isA<InvalidArgumentException>()));
+      expect(() => input.require('title'),
+          throwsA(isA<InvalidArgumentException>()));
     });
 
-    test('should fall back to the provided default when the flag is absent', () {
+    test('should fall back to the provided default when the flag is absent',
+        () {
       final input = CliInputValidator([]);
 
       expect(input.require('sort', fallback: 'priority'), 'priority');

@@ -13,7 +13,8 @@ void main() {
     late JsonTaskRepository repository;
 
     setUp(() async {
-      tempDir = await Directory.systemTemp.createTemp('taskforge_cli_repo_test_');
+      tempDir =
+          await Directory.systemTemp.createTemp('taskforge_cli_repo_test_');
       final dataSource = JsonFileDataSource('${tempDir.path}/tasks.json');
       repository = JsonTaskRepository(dataSource);
     });
@@ -25,7 +26,8 @@ void main() {
     });
 
     test('should persist an added task so it can be retrieved by id', () async {
-      final task = StandardTask(title: 'Write report', priority: Priority.medium, id: 'a1');
+      final task = StandardTask(
+          title: 'Write report', priority: Priority.medium, id: 'a1');
 
       await repository.add(task);
       final fetched = await repository.getById('a1');
@@ -34,7 +36,8 @@ void main() {
       expect(fetched!.title, 'Write report');
     });
 
-    test('should round-trip an UrgentTask as the exact same subclass', () async {
+    test('should round-trip an UrgentTask as the exact same subclass',
+        () async {
       final task = UrgentTask(
         title: 'File taxes',
         priority: Priority.high,
@@ -48,8 +51,10 @@ void main() {
       expect(fetched, isA<UrgentTask>());
     });
 
-    test('should find a task by a case-insensitive, trimmed title match', () async {
-      await repository.add(StandardTask(title: 'Buy Milk', priority: Priority.low, id: 'm1'));
+    test('should find a task by a case-insensitive, trimmed title match',
+        () async {
+      await repository.add(
+          StandardTask(title: 'Buy Milk', priority: Priority.low, id: 'm1'));
 
       final found = await repository.findByTitle('  buy milk  ');
 
@@ -61,8 +66,10 @@ void main() {
       expect(found, isNull);
     });
 
-    test('should update an existing task in place rather than duplicating it', () async {
-      final task = StandardTask(title: 'Task', priority: Priority.low, id: 't1');
+    test('should update an existing task in place rather than duplicating it',
+        () async {
+      final task =
+          StandardTask(title: 'Task', priority: Priority.low, id: 't1');
       await repository.add(task);
 
       await repository.update(task.copyWith(isDone: true));
@@ -73,15 +80,18 @@ void main() {
     });
 
     test('should remove a task by id on delete', () async {
-      await repository.add(StandardTask(title: 'Task', priority: Priority.low, id: 't1'));
+      await repository
+          .add(StandardTask(title: 'Task', priority: Priority.low, id: 't1'));
 
       await repository.deleteById('t1');
 
       expect(await repository.getById('t1'), isNull);
     });
 
-    test('should persist across repository instances pointed at the same file', () async {
-      await repository.add(StandardTask(title: 'Persisted', priority: Priority.low, id: 'p1'));
+    test('should persist across repository instances pointed at the same file',
+        () async {
+      await repository.add(
+          StandardTask(title: 'Persisted', priority: Priority.low, id: 'p1'));
 
       final dataSource2 = JsonFileDataSource('${tempDir.path}/tasks.json');
       final repository2 = JsonTaskRepository(dataSource2);

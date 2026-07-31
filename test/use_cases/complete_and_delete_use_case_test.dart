@@ -18,7 +18,8 @@ void main() {
     });
 
     test('should mark the matching task as done', () async {
-      final task = StandardTask(title: 'Task', priority: Priority.low, id: 't1');
+      final task =
+          StandardTask(title: 'Task', priority: Priority.low, id: 't1');
       repository.seed([task]);
 
       final updated = await useCase('t1');
@@ -43,15 +44,19 @@ void main() {
     });
 
     test('should remove the matching task', () async {
-      repository.seed([StandardTask(title: 'Task', priority: Priority.low, id: 't1')]);
+      repository.seed(
+          [StandardTask(title: 'Task', priority: Priority.low, id: 't1')]);
 
       await useCase('t1');
 
       expect(await repository.getById('t1'), isNull);
     });
 
-    test('should throw TaskNotFoundException for an unknown id and leave the store untouched', () async {
-      repository.seed([StandardTask(title: 'Task', priority: Priority.low, id: 't1')]);
+    test(
+        'should throw TaskNotFoundException for an unknown id and leave the store untouched',
+        () async {
+      repository.seed(
+          [StandardTask(title: 'Task', priority: Priority.low, id: 't1')]);
 
       expect(() => useCase('missing'), throwsA(isA<TaskNotFoundException>()));
       expect(await repository.getAll(), hasLength(1));

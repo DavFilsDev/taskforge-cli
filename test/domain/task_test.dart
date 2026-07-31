@@ -19,7 +19,8 @@ void main() {
       expect(PriorityX.parse('  medium '), Priority.medium);
     });
 
-    test('should throw TaskValidationException when parsing an invalid value', () {
+    test('should throw TaskValidationException when parsing an invalid value',
+        () {
       expect(
         () => PriorityX.parse('urgent'),
         throwsA(isA<TaskValidationException>()),
@@ -56,8 +57,10 @@ void main() {
     });
 
     test('two tasks with the same id should be equal', () {
-      final task = StandardTask(title: 'Task', priority: Priority.low, id: 'x1');
-      final other = StandardTask(title: 'Other', priority: Priority.high, id: 'x1');
+      final task =
+          StandardTask(title: 'Task', priority: Priority.low, id: 'x1');
+      final other =
+          StandardTask(title: 'Other', priority: Priority.high, id: 'x1');
       expect(task, equals(other));
     });
   });
@@ -95,7 +98,8 @@ void main() {
       expect(task.isOverdue(now: DateTime(2020, 1, 2)), isFalse);
     });
 
-    test('should report isDueSoon within the urgent window but not overdue', () {
+    test('should report isDueSoon within the urgent window but not overdue',
+        () {
       final now = DateTime(2026, 1, 1, 12);
       final task = UrgentTask(
         title: 'Submit report',

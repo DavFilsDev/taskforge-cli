@@ -32,7 +32,8 @@ void main() {
       expect(result.map((t) => t.title), ['High', 'Low']);
     });
 
-    test('should exclude completed tasks when includeCompleted is false', () async {
+    test('should exclude completed tasks when includeCompleted is false',
+        () async {
       repository.seed([
         StandardTask(title: 'Done', priority: Priority.low, isDone: true),
         StandardTask(title: 'Pending', priority: Priority.low),

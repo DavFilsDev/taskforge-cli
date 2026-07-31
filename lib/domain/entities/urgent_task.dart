@@ -32,7 +32,8 @@ final class UrgentTask extends Task {
   bool isDueSoon({DateTime? now}) {
     final reference = now ?? DateTime.now();
     final hoursRemaining = requiredDeadline.difference(reference).inHours;
-    return !isDone && hoursRemaining >= 0 &&
+    return !isDone &&
+        hoursRemaining >= 0 &&
         hoursRemaining <= AppConstants.urgentWindowHours;
   }
 

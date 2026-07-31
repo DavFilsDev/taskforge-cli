@@ -22,7 +22,9 @@ void main() {
       expect(task, isA<StandardTask>());
     });
 
-    test('should promote to UrgentTask when the deadline is within the urgent window', () {
+    test(
+        'should promote to UrgentTask when the deadline is within the urgent window',
+        () {
       final now = DateTime(2026, 1, 1);
       final task = TaskFactory.create(
         title: 'Task',
@@ -33,7 +35,8 @@ void main() {
       expect(task, isA<UrgentTask>());
     });
 
-    test('should promote to UrgentTask when the deadline has already passed', () {
+    test('should promote to UrgentTask when the deadline has already passed',
+        () {
       final now = DateTime(2026, 1, 1);
       final task = TaskFactory.create(
         title: 'Task',

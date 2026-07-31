@@ -15,7 +15,8 @@ final class CliInputValidator {
         continue;
       }
       final key = token.substring(2);
-      final hasValue = i + 1 < rawArgs.length && !rawArgs[i + 1].startsWith('--');
+      final hasValue =
+          i + 1 < rawArgs.length && !rawArgs[i + 1].startsWith('--');
       flags[key] = hasValue ? rawArgs[i + 1] : 'true';
       i += hasValue ? 2 : 1;
     }

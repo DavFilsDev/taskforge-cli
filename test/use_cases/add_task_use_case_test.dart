@@ -17,15 +17,19 @@ void main() {
     });
 
     test('should persist a new task and return it', () async {
-      final task = await useCase(title: 'Write tests', priority: Priority.medium);
+      final task =
+          await useCase(title: 'Write tests', priority: Priority.medium);
 
       expect(task.title, 'Write tests');
       final stored = await repository.getAll();
       expect(stored, hasLength(1));
     });
 
-    test('should throw DuplicateTaskException for a case-insensitive duplicate title', () async {
-      repository.seed([StandardTask(title: 'Write tests', priority: Priority.low)]);
+    test(
+        'should throw DuplicateTaskException for a case-insensitive duplicate title',
+        () async {
+      repository
+          .seed([StandardTask(title: 'Write tests', priority: Priority.low)]);
 
       expect(
         () => useCase(title: '  WRITE TESTS  ', priority: Priority.high),
@@ -33,18 +37,19 @@ void main() {
       );
     });
 
-    test('should propagate TaskValidationException for an empty title', () async {
+    test('should propagate TaskValidationException for an empty title',
+        () async {
       expect(
         () => useCase(title: '   ', priority: Priority.low),
         throwsA(isA<TaskValidationException>()),
       );
     });
 
-    test('should not call repository.add when validation fails first', () async {
+    test('should not call repository.add when validation fails first',
+        () async {
       try {
         await useCase(title: '', priority: Priority.low);
-      } catch (_) {
-      }
+      } catch (_) {}
       expect(repository.callCountAdd, 0);
     });
   });

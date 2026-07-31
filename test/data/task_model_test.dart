@@ -35,7 +35,9 @@ void main() {
       expect(restored, isA<UrgentTask>());
     });
 
-    test('should throw MalformedDataException when marked urgent but missing a deadline', () {
+    test(
+        'should throw MalformedDataException when marked urgent but missing a deadline',
+        () {
       final json = {
         'id': 'x',
         'title': 'Task',
@@ -45,20 +47,24 @@ void main() {
         'type': 'urgent',
       };
 
-      expect(() => TaskModel.fromJson(json), throwsA(isA<MalformedDataException>()));
+      expect(() => TaskModel.fromJson(json),
+          throwsA(isA<MalformedDataException>()));
     });
 
-    test('should throw MalformedDataException for a record with the wrong field types', () {
+    test(
+        'should throw MalformedDataException for a record with the wrong field types',
+        () {
       final json = {
         'id': 'x',
-        'title': 123, 
+        'title': 123,
         'priority': 'low',
         'deadline': null,
         'isDone': false,
         'type': 'standard',
       };
 
-      expect(() => TaskModel.fromJson(json), throwsA(isA<MalformedDataException>()));
+      expect(() => TaskModel.fromJson(json),
+          throwsA(isA<MalformedDataException>()));
     });
   });
 }
