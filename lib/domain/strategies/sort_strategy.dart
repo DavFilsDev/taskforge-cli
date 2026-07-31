@@ -1,3 +1,4 @@
+import '../entities/priority.dart';
 import '../entities/task.dart';
 
 abstract interface class SortStrategy {
